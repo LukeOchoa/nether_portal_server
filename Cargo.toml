@@ -1,0 +1,34 @@
+[package]
+name = "nether_portals_server"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+# Webserver 
+axum = { version = "0.6.15", features = ["headers"] }
+
+# Asyc 
+tokio = { version = "1.27.0", features = ["full"] }
+
+# JSON
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_derive = "1.0"
+
+# PostgreSQL
+sqlx = { version = "0.6.3", features = ["runtime-tokio-rustls", "postgres"] }
+
+# Error
+anyhow = "1.0"
+
+# Cryptography
+bcrypt = "0.14"
+
+# UUID
+uuid = { version = "1.3.1", features = ["v4"] }
+
+# Time
+chrono = "0.4.24"
