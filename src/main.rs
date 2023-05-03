@@ -64,6 +64,10 @@ struct Profile {
     sessionkey: String,
 }
 
+async fn big_boi_test(Json(payload): Json<serde_json::Value>) -> impl IntoResponse {
+    Json(breaker_x())
+}
+
 async fn login(Json(payload): Json<serde_json::Value>) -> Result<Json<serde_json::Value>, ErrorH> {
     // Deserialize response to struct Profile
     let profile: Profile = serde_json::from_value(payload).unwrap();

@@ -15,7 +15,7 @@ use axum::http::StatusCode;
 pub async fn db_connection_async() -> Result<Pool<Postgres>, ErrorH> {
     PgPoolOptions::new()
         .max_connections(5)
-        .connect("postgres://peony:free144@localhost/breaker")
+        .connect("postgres://hyacinth:free144@localhost/breaker")
         .await
         .to_errorh(StatusCode::INTERNAL_SERVER_ERROR)
 }
@@ -217,6 +217,7 @@ pub async fn execute_sql(sql: &str, pool: &Pool<Postgres>) -> Result<(), ErrorH>
     Ok(())
 }
 
+use sqlx::Column;
 use std::collections::HashMap;
 pub async fn get_npt_as_hashmap(
     sql: &str,
@@ -233,16 +234,20 @@ pub async fn get_npt_as_hashmap(
 
     // For each column in the table
     rows.into_iter().enumerate().for_each(|(key, row)| {
+        println!("rows: {}", row.len());
         // for each row in the column
         let mut sub: HashMap<String, String> = HashMap::new();
         (0..row.len()).into_iter().for_each(|index| {
-            // Convert the Int Or Text into a (rust String)
-            let string: String = row
+            // Get the column value; Convert the Int Or Text into a (rust String)
+            let cvalue: String = row
                 .try_get(index)
                 .unwrap_or_else(|_| row.get::<i32, usize>(index).to_string());
 
+            // Get the column name
+            let cname = row.column(index).name().to_string();
+
             // Append to inner hashmap
-            sub.insert(index.to_string(), string);
+            sub.insert(cname, cvalue);
         });
         // Append if to the soon-to-be-Jsonified HashMap
         payload.insert(key.to_string(), sub);
